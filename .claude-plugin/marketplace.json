@@ -9,7 +9,12 @@
     {
       "name": "premissas-decarb",
       "path": "premissas-decarb",
-      "description": "Plugin para gerenciamento de premissas de descarbonização. Extrai premissas de documentos e insere no workbook Premissas_Decarb."
+      "description": "Plugin para gerenciamento de premissas de descarbonização. Extrai premissas de documentos e insere no workbook Premissas_Decarb.",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/lucasgabacellar/claude-plugins.git",
+        "subdir": "premissas-decarb"
+      }
     }
   ]
 }
