@@ -50,7 +50,7 @@ For each assumption found, extract:
 
 | Field | Required | Rules |
 |---|---|---|
-| Assumption | YES | One descriptive name. ONE data point per row. |
+| Assumption | YES | Short, simple, objective name. ONE data point per row. No category prefixes like "[Processo]". |
 | Value | YES | Numeric ONLY. Dot decimal. No text/ranges. |
 | Unit | YES | Unit of measurement |
 | Source | YES | PRIMARY source author + title + year + link |
@@ -59,6 +59,13 @@ For each assumption found, extract:
 | Access Date | AUTO | Today's date |
 | Responsible | AUTO | Current user |
 | Internal | AUTO | "No" for external, "Yes" for PSR-internal |
+
+**Naming rules:**
+- Names must be short, simple, didactic, and objective
+- NEVER prefix with category tags like "[Processo]", "[Mercado]", "[Técnico]"
+- Good: "Açúcar cristalizado no balanço de massa"
+- Bad: "[Processo] Açúcar cristalizado no balanço de massa (resto melaço)"
+- If context is needed, put it in Observations, not in the name
 
 **Splitting rules:**
 - "Volvo 300 km range, Scania 250 km range" → TWO assumptions
@@ -104,7 +111,8 @@ The widget must:
 │                                                 │
 │ Title:  [editable text field                 ]  │
 │ Author: [editable text field                 ]  │
-│ Type:   [editable text field                 ]  │
+│ Type:   [DROPDOWN: Report|Article|Book|       ]  │  ← MUST be dropdown
+│         [Database|Legislation|Standard|Other  ]  │     with workbook options
 │ Year:   [editable text field                 ]  │
 │ Link:   [editable text field                 ]  │
 │                                                 │
@@ -112,17 +120,20 @@ The widget must:
 └─────────────────────────────────────────────────┘
 ```
 
+**IMPORTANT: Source Type MUST be a `<select>` dropdown**, not a free text field. The workbook has data validation on this column. Use these exact options: Report, Article, Book, Database, Legislation, Standard, Thesis, Other (or the PT equivalents: Relatório, Artigo, Livro, Base de dados, Legislação, Norma, Tese, Outro — check the workbook's current language).
+
 **Assumption Cards:**
 ```
 ┌─────────────────────────────────────────────────┐
-│ #1                          [Target: dropdown]  │
+│ #1                          [Target: dropdown]  │  ← dropdown with sheet names
 │                                                 │
-│ Assumption: [editable                        ]  │
+│ Assumption: [editable text                   ]  │
 │ Value:      [editable — numeric only         ]  │
-│ Unit:       [editable                        ]  │
-│ Source:     [editable — author name          ]  │
-│ Observations: [editable                      ]  │
-│ Internal:   [editable                        ]  │
+│ Unit:       [editable text                   ]  │
+│ Source:     [DROPDOWN: only sources from      ]  │  ← MUST be dropdown
+│             [the source cards above           ]  │     NOT free text
+│ Observations: [editable text                 ]  │
+│ Internal:   [DROPDOWN: Yes / No              ]  │  ← dropdown
 │                                                 │
 │ ⚠ DUPLICATE: H-012 "CAPEX Eletrolisador"       │
 │   Existing value: 1400 USD/kW                   │
@@ -130,6 +141,12 @@ The widget must:
 │  [✓ OK]              [✗ Discard]                │
 └─────────────────────────────────────────────────┘
 ```
+
+**CRITICAL dropdown rules for the validation UI:**
+1. **Source field** in assumption cards: MUST be a `<select>` dropdown populated ONLY with the sources extracted in Step 4 (both new and existing). The user cannot type a custom source — they must pick from the list. This prevents mismatches between the assumption's source reference and actual sources in the workbook.
+2. **Source Type** in source cards: MUST be a `<select>` dropdown with the exact values accepted by the workbook's data validation.
+3. **Target sheet**: MUST be a `<select>` dropdown with the 8 topic sheet names.
+4. **Internal**: MUST be a `<select>` dropdown with Yes/No.
 
 **Border colors:**
 - Gray: not yet validated
@@ -182,27 +199,36 @@ Confirmar? [Sim] [Cancelar]
 
 **DO NOT WRITE TO THE .XLSM FILE.** Instead:
 
-1. Write `_premissas_import.json` to the workbook folder:
+1. Create the `_imports/` folder inside the workbook folder if it doesn't exist
+2. Write a timestamped JSON file:
 
 ```python
-import json
+import json, os
+from datetime import datetime
+
+# Create _imports folder if needed
+imports_dir = os.path.join('path/to/workbook/folder', '_imports')
+os.makedirs(imports_dir, exist_ok=True)
+
+# Timestamped filename
+filename = f"import_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+filepath = os.path.join(imports_dir, filename)
+
 data = {
     "sources": [...],  # approved sources
     "assumptions": [...]  # approved assumptions
 }
-with open('path/to/workbook/folder/_premissas_import.json', 'w', encoding='utf-8') as f:
+with open(filepath, 'w', encoding='utf-8') as f:
     json.dump(data, f, ensure_ascii=False, indent=2)
 ```
 
-2. Tell the user:
+3. Tell the user:
 
-> **Arquivo de importação criado: `_premissas_import.json`**
+> **Arquivo de importação criado: `_imports/{filename}`**
 > 
-> Para importar no workbook:
-> 1. Abra o `Premissas_Decarb.xlsm` no Excel
-> 2. Rode **Alt+F8 → ImportFromJSON**
-> 3. O macro cria um backup automático antes de importar
-> 4. Verifique os dados inseridos
+> Basta abrir (ou fechar e reabrir) o workbook no Excel.
+> A importação é automática — o Excel detecta o arquivo e pergunta se deseja importar.
+> Um backup é criado automaticamente antes da importação.
 
 ### Step 8: Generate Report
 

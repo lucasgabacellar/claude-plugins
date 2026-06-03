@@ -28,7 +28,8 @@ The plugin writes a `.json` import file. The user then runs a VBA macro inside E
 ## Write Procedure
 
 1. Validate all data with the user via the interactive widget
-2. Write `_premissas_import.json` to the workbook folder:
+2. Create `_imports/` folder inside the workbook folder if it doesn't exist
+3. Write a timestamped JSON file `_imports/import_YYYYMMDD_HHMMSS.json`:
 ```json
 {
   "sources": [
@@ -49,8 +50,9 @@ The plugin writes a `.json` import file. The user then runs a VBA macro inside E
   ]
 }
 ```
-3. Tell the user: **"Abra o workbook no Excel e rode Alt+F8 → ImportFromJSON"**
-4. The VBA macro handles: backup, source creation, assumption insertion, ID generation, table expansion, protection
+4. Tell the user: **"Abra o workbook no Excel — a importação é automática."**
+5. The VBA macro (runs on Workbook_Open) handles: backup, source creation, assumption insertion, ID generation, table expansion, protection
+6. After importing, the JSON is renamed from `import_*` to `done_*` — history is preserved
 
 ## Data Integrity Rules
 
