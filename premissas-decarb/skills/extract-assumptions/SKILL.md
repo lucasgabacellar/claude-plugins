@@ -58,7 +58,7 @@ For each assumption found, extract:
 | Observations | IF RELEVANT | Context, caveats. NOT quantitative data. |
 | Access Date | AUTO | Today's date |
 | Responsible | AUTO | Current user |
-| Internal | AUTO | "No" for external, "Yes" for PSR-internal |
+| Internal | AUTO | "Não" for external, "Sim" for PSR-internal (always PT, never "Yes"/"No") |
 
 **Naming rules:**
 - Names must be short, simple, didactic, and objective
@@ -146,7 +146,7 @@ The widget must:
 1. **Source field** in assumption cards: MUST be a `<select>` dropdown populated ONLY with the sources extracted in Step 4 (both new and existing). The user cannot type a custom source — they must pick from the list. This prevents mismatches between the assumption's source reference and actual sources in the workbook.
 2. **Source Type** in source cards: MUST be a `<select>` dropdown with the exact values accepted by the workbook's data validation.
 3. **Target sheet**: MUST be a `<select>` dropdown with the 8 topic sheet names.
-4. **Internal**: MUST be a `<select>` dropdown with Yes/No.
+4. **Internal**: MUST be a `<select>` dropdown with Sim/Não (always in Portuguese, never Yes/No).
 
 **Border colors:**
 - Gray: not yet validated

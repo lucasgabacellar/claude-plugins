@@ -1,6 +1,6 @@
 {
   "name": "premissas-decarb",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Plugin para gerenciamento de premissas de descarbonização. Extrai premissas de documentos (PDF, Word, Excel), valida com o usuário, e insere no workbook Premissas_Decarb. Também consulta premissas existentes.",
   "author": {
     "name": "Lucas Bacellar — PSR Consultoria"
