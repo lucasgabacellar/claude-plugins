@@ -1,0 +1,11 @@
+{
+  "name": "claude-plugins",
+  "description": "Lucas Bacellar's Claude Code plugins collection",
+  "plugins": [
+    {
+      "name": "premissas-decarb",
+      "path": "premissas-decarb",
+      "description": "Plugin para gerenciamento de premissas de descarbonização. Extrai premissas de documentos e insere no workbook Premissas_Decarb."
+    }
+  ]
+}
