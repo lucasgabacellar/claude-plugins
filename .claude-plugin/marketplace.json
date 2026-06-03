@@ -1,6 +1,10 @@
 {
-  "name": "claude-plugins",
-  "description": "Lucas Bacellar's Claude Code plugins collection",
+  "name": "lucasbacellar-plugins",
+  "description": "Lucas Bacellar's plugins collection",
+  "owner": {
+    "name": "Lucas Bacellar",
+    "github": "lucasgabacellar"
+  },
   "plugins": [
     {
       "name": "premissas-decarb",
